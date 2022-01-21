@@ -16,12 +16,14 @@ function App() {
   console.log(data);
 
   const mintNFT = (_account, _name) => {
+    console.log('_account', _account);
     setLoading(true);
     blockchain.lipToken.methods
       .createRandomLip(_name)
       .send({
         from: _account,
         value: blockchain.web3.utils.toWei("0.01", "ether"),
+        // value: 100*10000000000000000,
       })
       .once("error", (err) => {
         setLoading(false);
@@ -79,13 +81,13 @@ function App() {
         </s.Container>
       ) : (
         <s.Container ai={"center"} style={{ padding: "24px" }}>
-          <s.TextTitle>Welcome to the game</s.TextTitle>
+          <s.TextTitle>Welcome to the game {blockchain.account}</s.TextTitle>
           <s.SpacerSmall />
           <button
             disabled={loading ? 1 : 0}
             onClick={(e) => {
               e.preventDefault();
-              mintNFT(blockchain.account, "Unknown");
+              mintNFT(blockchain.account, "Daniel");
             }}
           >
             CREATE NFT LIP

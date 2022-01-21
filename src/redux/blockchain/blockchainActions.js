@@ -64,6 +64,28 @@ export const connect = () => {
             window.location.reload();
           });
           // Add listeners end
+        } else if (networkId == 5777) {
+          const lipTokenNetworkData = await LipToken.networks[networkId];
+          console.log('lipTokenNetworkData', lipTokenNetworkData);
+          const lipToken = new web3.eth.Contract(
+            LipToken.abi,
+            lipTokenNetworkData.address
+          );
+          dispatch(
+            connectSuccess({
+              account: accounts[0],
+              lipToken: lipToken,
+              web3: web3,
+            })
+          );
+          // Add listeners start
+          window.ethereum.on("accountsChanged", (accounts) => {
+            dispatch(updateAccount(accounts[0]));
+          });
+          window.ethereum.on("chainChanged", () => {
+            window.location.reload();
+          });
+          // Add listeners end
         } else {
           dispatch(connectFailed("Change network to Polygon."));
         }
