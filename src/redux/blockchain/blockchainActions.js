@@ -1,6 +1,7 @@
 // constants
 import Web3 from "web3";
 import LipToken from "../../contracts/LipToken.json";
+import Market from "../../contracts/Market.json";
 // log
 import { fetchData } from "../data/dataActions";
 
@@ -37,13 +38,15 @@ export const connect = () => {
     if (window.ethereum) {
       let web3 = new Web3(window.ethereum);
       try {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
+        const accounts = await web3.eth.requestAccounts();
+        // await  window.ethereum.request({
+        //   method: "eth_accounts",
+        // });
         const networkId = await window.ethereum.request({
           method: "net_version",
         });
-        console.log(networkId);
+        // console.log(accounts);
+        // console.log(networkId);
         if (networkId == 137) {
           const lipToken = new web3.eth.Contract(
             LipToken.abi,
@@ -66,15 +69,21 @@ export const connect = () => {
           // Add listeners end
         } else if (networkId == 5777) {
           const lipTokenNetworkData = await LipToken.networks[networkId];
-          console.log('lipTokenNetworkData', lipTokenNetworkData);
+          const nftMarketNetworkData = await Market.networks[networkId];
+          // console.log("lipTokenNetworkData", lipTokenNetworkData);
           const lipToken = new web3.eth.Contract(
             LipToken.abi,
             lipTokenNetworkData.address
+          );
+          const nftMarket = new web3.eth.Contract(
+            Market.abi,
+            nftMarketNetworkData.address
           );
           dispatch(
             connectSuccess({
               account: accounts[0],
               lipToken: lipToken,
+              market: nftMarket,
               web3: web3,
             })
           );

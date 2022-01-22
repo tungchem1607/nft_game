@@ -46,3 +46,50 @@ export const fetchData = (account) => {
     }
   };
 };
+
+const fetchDataMarketRequest = () => {
+  return {
+    type: "CHECK_DATA_MARKET_REQUEST",
+  };
+};
+
+const fetchDataMarketSuccess = (payload) => {
+  return {
+    type: "CHECK_DATA_MARKET_SUCCESS",
+    payload: payload,
+  };
+};
+
+const fetchDataMarketFailed = (payload) => {
+  return {
+    type: "CHECK_DATA_MARKET_FAILED",
+    payload: payload,
+  };
+};
+
+export const fetchDataMarket = (account) => {
+  return async (dispatch) => {
+    dispatch(fetchDataMarketRequest());
+    try {
+      let allMarkets = await store
+        .getState()
+        .blockchain.market.methods.fetchMarketItems()
+        .call();
+      let allOwnerMarkets = await store
+        .getState()
+        .blockchain.market.methods.fetchMarketItems()
+        // .blockchain.market.methods.fetchMarketItems(account)
+        .call();
+      console.log('allMarkets',allMarkets);
+      dispatch(
+        fetchDataMarketSuccess({
+          allMarkets,
+          allOwnerMarkets,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+      dispatch(fetchDataMarketFailed("Could not load data from contract."));
+    }
+  };
+};
