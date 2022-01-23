@@ -1,8 +1,7 @@
-const LipToken = artifacts.require("LipToken");
-const Market = artifacts.require("Market");
 const NFT = artifacts.require("NFT");
+const NFTMarket = artifacts.require("NFTMarket");
 
 module.exports = function (deployer) {
-  deployer.deploy(LipToken, "LipTokens", "LIPS");
-  deployer.deploy(Market);
+  deployer.deploy(NFT, "LipTokens", "LIPS");
+  deployer.deploy(NFTMarket);
 };

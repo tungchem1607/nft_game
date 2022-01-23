@@ -1,7 +1,7 @@
 // constants
 import Web3 from "web3";
-import LipToken from "../../contracts/LipToken.json";
-import Market from "../../contracts/Market.json";
+import LipToken from "../../contracts/NFT.json";
+import Market from "../../contracts/NFTMarket.json";
 // log
 import { fetchData } from "../data/dataActions";
 
