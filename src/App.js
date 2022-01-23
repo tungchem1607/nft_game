@@ -14,9 +14,9 @@ function App() {
   const dataMarket = useSelector((state) => state.dataMarket);
   const [loading, setLoading] = useState(false);
 
-  console.log("blockchain", blockchain);
+  // console.log("blockchain", blockchain);
   // console.log('data', data);
-  console.log("dataMarket", dataMarket);
+  // console.log("dataMarket", dataMarket);
 
   const mintNFT = (_account, _name) => {
     console.log("_account", _account);
@@ -36,6 +36,7 @@ function App() {
         setLoading(false);
         console.log(receipt);
         dispatch(fetchData(blockchain.account));
+        dispatch(fetchDataMarket(blockchain.account));
       });
   };
 
@@ -58,7 +59,6 @@ function App() {
   };
   const approve = (_account, _id) => {
     setLoading(true);
-    console.log("blockchain.market._address", blockchain.lipToken.methods);
     blockchain.lipToken.methods
       .approve(blockchain.market._address, _id)
       .send({
@@ -76,16 +76,15 @@ function App() {
   };
   const sell = (_account, _item, _price) => {
     setLoading(true);
-    // console.log('_item', _item);
     blockchain.market.methods
       .createMarketItem(
-        blockchain.lipToken.nftContract,
-        _item.itemId,
+        blockchain.lipToken._address,
+        _item.id,
         blockchain.web3.utils.toWei(_price.toString(), "ether")
       )
       .send({
         from: _account,
-        value: blockchain.web3.utils.toWei("0.01", "ether"),
+        value: blockchain.web3.utils.toWei("0.3", "ether"),
       })
       .once("error", (err) => {
         setLoading(false);
@@ -106,7 +105,10 @@ function App() {
       .createMarketSale(_item.nftContract, _item.itemId)
       .send({
         from: _account,
-        value: blockchain.web3.utils.toWei(blockchain.web3.utils.fromWei(_item.price, "ether").toString(), "ether"),
+        value: blockchain.web3.utils.toWei(
+          blockchain.web3.utils.fromWei(_item.price, "ether").toString(),
+          "ether"
+        ),
       })
       .once("error", (err) => {
         setLoading(false);
