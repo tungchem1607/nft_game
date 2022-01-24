@@ -1,8 +1,8 @@
 const initialState = {
   loading: false,
   account: null,
-  lipToken: null,
-  market: null,
+  NFTToken: null,
+  nftMarket: null,
   web3: null,
   errorMsg: "",
 };
@@ -19,8 +19,8 @@ const blockchainReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         account: action.payload.account,
-        lipToken: action.payload.lipToken,
-        market: action.payload.market,
+        NFTToken: action.payload.NFTToken,
+        nftMarket: action.payload.nftMarket,
         web3: action.payload.web3,
       };
     case "CONNECTION_FAILED":

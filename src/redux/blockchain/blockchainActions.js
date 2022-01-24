@@ -1,5 +1,7 @@
 // constants
 import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
+
 import LipToken from "../../contracts/NFT.json";
 import Market from "../../contracts/NFTMarket.json";
 // log
@@ -47,7 +49,7 @@ export const connect = () => {
         });
         // console.log(accounts);
         // console.log(networkId);
-        if (networkId == 137) {
+        if (networkId === 137) {
           const lipToken = new web3.eth.Contract(
             LipToken.abi,
             "0x247700BBab4dC984547444eCaa95f4E3Ed5dEC74"
@@ -67,7 +69,7 @@ export const connect = () => {
             window.location.reload();
           });
           // Add listeners end
-        } else if (networkId == 5777) {
+        } else if (networkId === 5777) {
           const lipTokenNetworkData = await LipToken.networks[networkId];
           const nftMarketNetworkData = await Market.networks[networkId];
           // console.log("lipTokenNetworkData", lipTokenNetworkData);
@@ -104,6 +106,14 @@ export const connect = () => {
     } else {
       dispatch(connectFailed("Install Metamask."));
     }
+  };
+};
+
+export const updateContract = (options) => {
+  return async (dispatch) => {
+    dispatch(connectRequest());
+    // console.log("options", options);
+    dispatch(connectSuccess(options));
   };
 };
 

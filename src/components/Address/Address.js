@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
-// import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "../../helpers/formatters";
 import Blockie from "../Blockie";
+import { useWeb3React } from "@web3-react/core";
 import "./identicon.css";
 
 const styles = {
@@ -17,14 +17,13 @@ const styles = {
 };
 
 function Address(props) {
-  // const { walletAddress } = useMoralisDapp();
-  const walletAddress = "";
+  const { account } = useWeb3React();
   const [address, setAddress] = useState();
   const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
-    setAddress(props?.address || walletAddress);
-  }, [walletAddress, props]);
+    setAddress(props?.address || account);
+  }, [account, props]);
 
   if (!address) return null;
 

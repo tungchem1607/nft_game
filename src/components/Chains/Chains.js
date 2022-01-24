@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import useChain from "hooks/useChain";
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+// import useChain from "../../hooks/useChain";
+// import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { AvaxLogo, PolygonLogo, BSCLogo, ETHLogo } from "./Logos";
+import { useWeb3React } from "@web3-react/core";
+import Web3 from "web3";
 
 const styles = {
   item: {
@@ -27,73 +29,74 @@ const menuItems = [
     value: "Ethereum",
     icon: <ETHLogo />,
   },
-  // {
-  //   key: "0x539",
-  //   value: "Local Chain",
-  //   icon: <ETHLogo />,
-  // },
-  // {
-  //   key: "0x3",
-  //   value: "Ropsten Testnet",
-  //   icon: <ETHLogo />,
-  // },
-  // {
-  //   key: "0x4",
-  //   value: "Rinkeby Testnet",
-  //   icon: <ETHLogo />,
-  // },
-  // {
-  //   key: "0x2a",
-  //   value: "Kovan Testnet",
-  //   icon: <ETHLogo />,
-  // },
-  // {
-  //   key: "0x5",
-  //   value: "Goerli Testnet",
-  //   icon: <ETHLogo />,
-  // },
-  // {
-  //   key: "0x38",
-  //   value: "Binance",
-  //   icon: <BSCLogo />,
-  // },
-  // {
-  //   key: "0x61",
-  //   value: "Smart Chain Testnet",
-  //   icon: <BSCLogo />,
-  // },
-  // {
-  //   key: "0x89",
-  //   value: "Polygon",
-  //   icon: <PolygonLogo />,
-  // },
+  {
+    key: "0x539",
+    value: "Local Chain",
+    icon: <ETHLogo />,
+  },
+  {
+    key: "0x3",
+    value: "Ropsten Testnet",
+    icon: <ETHLogo />,
+  },
+  {
+    key: "0x4",
+    value: "Rinkeby Testnet",
+    icon: <ETHLogo />,
+  },
+  {
+    key: "0x2a",
+    value: "Kovan Testnet",
+    icon: <ETHLogo />,
+  },
+  {
+    key: "0x5",
+    value: "Goerli Testnet",
+    icon: <ETHLogo />,
+  },
+  {
+    key: "0x38",
+    value: "Binance",
+    icon: <BSCLogo />,
+  },
+  {
+    key: "0x61",
+    value: "Smart Chain Testnet",
+    icon: <BSCLogo />,
+  },
+  {
+    key: "0x89",
+    value: "Polygon",
+    icon: <PolygonLogo />,
+  },
   {
     key: "0x13881",
     value: "Mumbai",
     icon: <PolygonLogo />,
   },
-  // {
-  //   key: "0xa86a",
-  //   value: "Avalanche",
-  //   icon: <AvaxLogo />,
-  // },
+  {
+    key: "0xa86a",
+    value: "Avalanche",
+    icon: <AvaxLogo />,
+  },
 ];
 
 function Chains() {
-  const { switchNetwork } = useChain();
-  const { chainId } = useMoralisDapp();
+  const web3 = new Web3(window.ethereum);
+  // const { switchNetwork } = useChain();
   const [selected, setSelected] = useState({});
-
+  const { chainId } = useWeb3React();
   useEffect(() => {
     if (!chainId) return null;
-    const newSelected = menuItems.find((item) => item.key === chainId);
+    const hexChainId = web3.utils.toHex(chainId);
+    const newSelected = menuItems.find((item) => item.key === hexChainId);
     setSelected(newSelected);
     console.log("current chainId: ", chainId);
   }, [chainId]);
 
   const handleMenuClick = (e) => {
     console.log("switch to: ", e.key);
-    switchNetwork(e.key);
+    // switchNetwork(e.key);
   };
 
   const menu = (
@@ -103,7 +106,7 @@ function Chains() {
           <span style={{ marginLeft: "5px" }}>{item.value}</span>
         </Menu.Item>
       ))}
-    </Menu> 
+    </Menu>
   );
 
   return (

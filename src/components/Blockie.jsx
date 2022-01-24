@@ -1,6 +1,5 @@
 import Blockies from "react-blockies";
-import Web3 from "web3";
-// import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
+import { useWeb3React } from "@web3-react/core";
 
 /**
  * Shows a blockie image for the provided wallet address
@@ -9,14 +8,16 @@ import Web3 from "web3";
  */
 
 function Blockie(props) {
-  // const { walletAddress } = useMoralisDapp();
-  let web3 = new Web3(window.ethereum);
-  const { walletAddress } = web3.eth.requestAccounts();
-  if ((!props.address && !props.currentWallet) || !walletAddress) return null;
+  const { account } = useWeb3React();
+  if ((!props.address && !props.currentWallet) || !account) return null;
 
   return (
     <Blockies
-      seed={props.currentWallet ? walletAddress.toLowerCase() : props.address.toLowerCase()}
+      seed={
+        props.currentWallet
+          ? account.toLowerCase()
+          : props.address.toLowerCase()
+      }
       className="identicon"
       {...props}
     />

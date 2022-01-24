@@ -27,11 +27,11 @@ export const fetchData = (account) => {
     try {
       let allLips = await store
         .getState()
-        .blockchain.lipToken.methods.getLips()
+        .blockchain.NFTToken.methods.getLips()
         .call();
       let allOwnerLips = await store
         .getState()
-        .blockchain.lipToken.methods.getOwnerLips(account)
+        .blockchain.NFTToken.methods.getOwnerLips(account)
         .call();
 
       dispatch(
@@ -73,14 +73,14 @@ export const fetchDataMarket = (account) => {
     try {
       let allMarkets = await store
         .getState()
-        .blockchain.market.methods.fetchMarketItems()
+        .blockchain.nftMarket.methods.fetchMarketItems()
         .call();
       let allOwnerMarkets = await store
         .getState()
-        .blockchain.market.methods.fetchMarketItems()
+        .blockchain.nftMarket.methods.fetchMarketItems()
         // .blockchain.market.methods.fetchMarketItems(account)
         .call();
-      console.log('allMarkets',allMarkets);
+      // console.log("allMarkets", allMarkets);
       dispatch(
         fetchDataMarketSuccess({
           allMarkets,

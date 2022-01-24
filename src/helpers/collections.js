@@ -65,6 +65,22 @@ export const networkCollections = {
       addrs: "0x1A92f7381B9F03921564a437210bB9396471050C",
     },
   ],
+
+  "0x539": [
+    //Add Your Collections here
+    {
+      image:
+        "https://lh3.googleusercontent.com/BWCni9INm--eqCK800BbRkL10zGyflxfPwTHt4XphMSWG3XZvPx1JyGdfU9vSor8K046DJg-Q8Y4ioUlWHiCZqgR_L00w4vcbA-w=s0",
+      name: "NFT",
+      addrs: "0xB8E443B7D3d8346cC972710B5eAE03EC68C195e6",
+    },
+    {
+      image:
+        "https://ipfs.moralis.io:2053/ipfs/QmfLbpeVHxReWKNLaXTPcWiafi49eoAL4gRwMGuXtx2Eqe/images/14.png",
+      name: "Pixel Show",
+      addrs: "0xCA34404dD8Bd6537BE76F3A51B379F8949bD7973",
+    },
+  ],
 };
 
 export const getCollectionsByChain = (chain) => networkCollections[chain];

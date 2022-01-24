@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { useDispatch, useSelector } from "react-redux";
-import { connect } from "./redux/blockchain/blockchainActions";
-import { fetchData, fetchDataMarket } from "./redux/data/dataActions";
+// import { useDispatch, useSelector } from "react-redux";
+// import { connect } from "./redux/blockchain/blockchainActions";
+// import { fetchData, fetchDataMarket } from "./redux/data/dataActions";
 import * as s from "./styles/globalStyles";
 import LipRenderer from "./components/lipRenderer";
 import _color from "./assets/images/bg/_color.png";
@@ -15,6 +15,9 @@ import {
   Redirect,
 } from "react-router-dom";
 import Account from "./components/Account";
+import Chains from "./components/Chains";
+import NFTBalance from "./components/NFTBalance";
+import NFTTokenIds from "./components/NFTTokenIds";
 // import SearchCollections from "./components/SearchCollections";
 import { Menu, Layout} from "antd";
 import Text from "antd/lib/typography/Text";
@@ -53,133 +56,82 @@ const styles = {
   },
 };
 function App() {
-  const dispatch = useDispatch();
-  const blockchain = useSelector((state) => state.blockchain);
-  const data = useSelector((state) => state.data);
-  const dataMarket = useSelector((state) => state.dataMarket);
-  const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState("explore");
+  // const dispatch = useDispatch();
+  // const blockchain = useSelector((state) => state.blockchain);
+  // const data = useSelector((state) => state.data);
+  // const dataMarket = useSelector((state) => state.dataMarket);
+  // const [loading, setLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("ex"); // explore
   // console.log("blockchain", blockchain);
   // console.log('data', data);
   // console.log("dataMarket", dataMarket);
 
-  const mintNFT = (_account, _name) => {
-    console.log("_account", _account);
-    setLoading(true);
-    blockchain.lipToken.methods
-      .createRandomLip(_name)
-      .send({
-        from: _account,
-        value: blockchain.web3.utils.toWei("0.01", "ether"),
-        // value: 100*10000000000000000,
-      })
-      .once("error", (err) => {
-        setLoading(false);
-        console.log(err);
-      })
-      .then((receipt) => {
-        setLoading(false);
-        console.log(receipt);
-        dispatch(fetchData(blockchain.account));
-        dispatch(fetchDataMarket(blockchain.account));
-      });
-  };
+  // const mintNFT = (_account, _name) => {
+  //   console.log("_account", _account);
+  //   setLoading(true);
+  //   blockchain.lipToken.methods
+  //     .createRandomLip(_name)
+  //     .send({
+  //       from: _account,
+  //       value: blockchain.web3.utils.toWei("0.01", "ether"),
+  //       // value: 100*10000000000000000,
+  //     })
+  //     .once("error", (err) => {
+  //       setLoading(false);
+  //       console.log(err);
+  //     })
+  //     .then((receipt) => {
+  //       setLoading(false);
+  //       console.log(receipt);
+  //       dispatch(fetchData(blockchain.account));
+  //       dispatch(fetchDataMarket(blockchain.account));
+  //     });
+  // };
 
-  const levelUpLip = (_account, _id) => {
-    setLoading(true);
-    blockchain.lipToken.methods
-      .levelUp(_id)
-      .send({
-        from: _account,
-      })
-      .once("error", (err) => {
-        setLoading(false);
-        console.log(err);
-      })
-      .then((receipt) => {
-        setLoading(false);
-        console.log(receipt);
-        dispatch(fetchData(blockchain.account));
-      });
-  };
+  // const levelUpLip = (_account, _id) => {
+  //   setLoading(true);
+  //   blockchain.lipToken.methods
+  //     .levelUp(_id)
+  //     .send({
+  //       from: _account,
+  //     })
+  //     .once("error", (err) => {
+  //       setLoading(false);
+  //       console.log(err);
+  //     })
+  //     .then((receipt) => {
+  //       setLoading(false);
+  //       console.log(receipt);
+  //       dispatch(fetchData(blockchain.account));
+  //     });
+  // };
 
-  const approve = (_account, _id) => {
-    setLoading(true);
-    blockchain.lipToken.methods
-      .approve(blockchain.market._address, _id)
-      .send({
-        from: _account,
-      })
-      .once("error", (err) => {
-        setLoading(false);
-        console.log(err);
-      })
-      .then((receipt) => {
-        setLoading(false);
-        console.log(receipt);
-        dispatch(fetchData(blockchain.account));
-      });
-  };
-  const sell = (_account, _item, _price) => {
-    setLoading(true);
-    blockchain.market.methods
-      .createMarketItem(
-        blockchain.lipToken._address,
-        _item.id,
-        blockchain.web3.utils.toWei(_price.toString(), "ether")
-      )
-      .send({
-        from: _account,
-        value: blockchain.web3.utils.toWei("0.3", "ether"),
-      })
-      .once("error", (err) => {
-        setLoading(false);
-        console.log(err);
-      })
-      .then((receipt) => {
-        setLoading(false);
-        console.log(receipt);
-        dispatch(fetchData(blockchain.account));
-        dispatch(fetchDataMarket(blockchain.account));
-      });
-  };
+  
+  
 
-  const buy = (_account, _item) => {
-    setLoading(true);
-    // console.log('_item', _item);
-    blockchain.market.methods
-      .createMarketSale(_item.nftContract, _item.itemId)
-      .send({
-        from: _account,
-        value: blockchain.web3.utils.toWei(
-          blockchain.web3.utils.fromWei(_item.price, "ether").toString(),
-          "ether"
-        ),
-      })
-      .once("error", (err) => {
-        setLoading(false);
-        console.log(err);
-      })
-      .then((receipt) => {
-        setLoading(false);
-        console.log(receipt);
-        dispatch(fetchData(blockchain.account));
-        dispatch(fetchDataMarket(blockchain.account));
-      });
-  };
-
-  useEffect(() => {
-    if (blockchain.account != "" && blockchain.lipToken != null) {
-      dispatch(fetchData(blockchain.account));
-    }
-  }, [blockchain.lipToken]);
-
-  useEffect(() => {
-    if (blockchain.account != "" && blockchain.market != null) {
-      dispatch(fetchDataMarket(blockchain.account));
-    }
-  }, [blockchain.market]);
-
+  // const buy = (_account, _item) => {
+  //   setLoading(true);
+  //   // console.log('_item', _item);
+  //   blockchain.market.methods
+  //     .createMarketSale(_item.nftContract, _item.itemId)
+  //     .send({
+  //       from: _account,
+  //       value: blockchain.web3.utils.toWei(
+  //         blockchain.web3.utils.fromWei(_item.price, "ether").toString(),
+  //         "ether"
+  //       ),
+  //     })
+  //     .once("error", (err) => {
+  //       setLoading(false);
+  //       console.log(err);
+  //     })
+  //     .then((receipt) => {
+  //       setLoading(false);
+  //       console.log(receipt);
+  //       dispatch(fetchData(blockchain.account));
+  //       dispatch(fetchDataMarket(blockchain.account));
+  //     });
+  // };
   return (
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
@@ -198,7 +150,10 @@ function App() {
             }}
             defaultSelectedKeys={["nftMarket"]}
           >
-            <Menu.Item key="nftMarket" onClick={() => setInputValue("explore")} >
+            <Menu.Item key="nftMarket" onClick={() => 
+              // setInputValue("explore")
+              setInputValue("e")
+              } >
               <NavLink to="/NFTMarketPlace">🛒 Explore Market</NavLink>
             </Menu.Item>
             <Menu.Item key="nft">
@@ -209,20 +164,20 @@ function App() {
             </Menu.Item>
           </Menu>
           <div style={styles.headerRight}>
-            {/* <Chains /> */}
+            <Chains />
             {/* <NativeBalance /> */}
             <Account />
           </div>
         </Header>
         <div style={styles.content}>
           <Switch>
-            {/* <Route path="/nftBalance">
+            <Route path="/nftBalance">
               <NFTBalance />
             </Route>
             <Route path="/NFTMarketPlace">
               <NFTTokenIds inputValue={inputValue} setInputValue={setInputValue}/>
             </Route>
-            <Route path="/Transactions">
+            {/* <Route path="/Transactions">
               <NFTMarketTransactions />
             </Route> */}
           </Switch>

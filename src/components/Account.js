@@ -1,6 +1,4 @@
-// import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-// import { useMoralis } from "react-moralis";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getEllipsisTxt } from "../helpers/formatters";
 import Blockie from "./Blockie";
@@ -8,7 +6,7 @@ import { Button, Card, Modal } from "antd";
 import Address from "./Address/Address";
 import { SelectOutlined } from "@ant-design/icons";
 import { getExplorer } from "../helpers/networks";
-// import { connect } from "../redux/blockchain/blockchainActions";
+import { updateContract } from "../redux/blockchain/blockchainActions";
 
 import { useWeb3React } from "@web3-react/core";
 import Web3 from "web3";
@@ -34,18 +32,33 @@ const styles = {
 function Account() {
   const web3 = new Web3(window.ethereum);
   const dispatch = useDispatch();
-  // const { walletAddress, chainId } = useMoralisDapp();
-  const { active, account, library, connector, activate, deactivate } =
+  const { active, account, 
+    // library, connector,
+     activate, deactivate, chainId } =
     useWeb3React();
-  const blockchain = useSelector((state) => state.blockchain);
-  const chainId = web3.eth.getChainId();
-  // const { authenticate, isAuthenticated, logout } = null;
+  // const blockchain = useSelector((state) => state.blockchain);
+  // const networkId = web3.eth.net.getId();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  console.log("active", active);
-  console.log("account", account);
+  // const [chainId, setIsChainId] = useState(null);
+  // const getChainId = async () => {
+  //   setIsChainId(await web3.eth.getChainId());
+  // };
+
+  const willMount = useRef(true);
+  if (willMount.current) {
+    // getChainId();
+    activate(injected);
+    willMount.current = false;
+  }
+
+  // useEffect(() => {
+  //   if(account != null){
+  //     updateContract();
+  //   }
+  // }, account)
+
   const connect = async () => {
     try {
-      console.log(1231);
       await activate(injected);
     } catch (ex) {
       console.log(ex);
@@ -59,6 +72,7 @@ function Account() {
       console.log(ex);
     }
   };
+
   if (!active) {
     return (
       <div
@@ -79,7 +93,7 @@ function Account() {
       <>
         <div style={styles.account} onClick={() => setIsModalVisible(true)}>
           <p style={{ marginRight: "5px", ...styles.text }}>
-            {getEllipsisTxt(walletAddress, 6)}
+            {getEllipsisTxt(account, 6)}
           </p>
           <Blockie currentWallet scale={3} />
         </div>
@@ -110,11 +124,10 @@ function Account() {
               style={{ fontSize: "20px" }}
             />
             <div style={{ marginTop: "10px", padding: "0 10px" }}>
-              {console.log(
-                `${getExplorer(chainId)}/address/${blockchain.account}`
-              )}
               <a
-                href={`${getExplorer(chainId)}/address/${blockchain.account}`}
+                href={`${getExplorer(
+                  web3.utils.toHex(chainId)
+                )}address/${account}`}
                 target="_blank"
                 rel="noreferrer"
               >
