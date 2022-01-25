@@ -70,10 +70,12 @@ function NFTBalance() {
       })
       .once("error", (err) => {
         setLoading(false);
+        setVisibility(false);
         console.log(err);
       })
       .then((receipt) => {
         setLoading(false);
+        setVisibility(false);
         console.log(receipt);
         dispatch(fetchData(blockchain.account));
         dispatch(fetchDataMarket(blockchain.account));
@@ -112,7 +114,7 @@ function NFTBalance() {
   return (
     <>
       <div style={styles.NFTs}>
-        {/* {contractABIJson.noContractDeployed && (
+        {!blockchain?.NFTToken && (
           <>
             <Alert
               message="No Smart Contract Details Provided. Please deploy smart contract and provide address + ABI in the MoralisDappProvider.js file"
@@ -120,8 +122,8 @@ function NFTBalance() {
             />
             <div style={{ marginBottom: "10px" }}></div>
           </>
-        )} */}
-        {/* {!fetchSuccess && (
+        )}
+        {NFTToken.error && (
           <>
             <Alert
               message="Unable to fetch all NFT metadata... We are searching for a solution, please try again later!"
@@ -129,9 +131,9 @@ function NFTBalance() {
             />
             <div style={{ marginBottom: "10px" }}></div>
           </>
-        )} */}
+        )}
         {NFTToken &&
-          NFTToken.allLips.map((nft, index) => (
+          NFTToken.allOwnerLips.map((nft, index) => (
             <Card
               hoverable
               actions={[

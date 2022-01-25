@@ -88,50 +88,8 @@ function App() {
   //     });
   // };
 
-  // const levelUpLip = (_account, _id) => {
-  //   setLoading(true);
-  //   blockchain.lipToken.methods
-  //     .levelUp(_id)
-  //     .send({
-  //       from: _account,
-  //     })
-  //     .once("error", (err) => {
-  //       setLoading(false);
-  //       console.log(err);
-  //     })
-  //     .then((receipt) => {
-  //       setLoading(false);
-  //       console.log(receipt);
-  //       dispatch(fetchData(blockchain.account));
-  //     });
-  // };
-
-  
   
 
-  // const buy = (_account, _item) => {
-  //   setLoading(true);
-  //   // console.log('_item', _item);
-  //   blockchain.market.methods
-  //     .createMarketSale(_item.nftContract, _item.itemId)
-  //     .send({
-  //       from: _account,
-  //       value: blockchain.web3.utils.toWei(
-  //         blockchain.web3.utils.fromWei(_item.price, "ether").toString(),
-  //         "ether"
-  //       ),
-  //     })
-  //     .once("error", (err) => {
-  //       setLoading(false);
-  //       console.log(err);
-  //     })
-  //     .then((receipt) => {
-  //       setLoading(false);
-  //       console.log(receipt);
-  //       dispatch(fetchData(blockchain.account));
-  //       dispatch(fetchDataMarket(blockchain.account));
-  //     });
-  // };
   return (
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
@@ -188,11 +146,11 @@ function App() {
         <Text style={{ display: "block" }}>
           ⭐️ Please star this{" "}
           <a
-            href="https://github.com/ethereum-boilerplate/ethereum-boilerplate/"
+            href="https://github.com/tungchem1607"
             target="_blank"
             rel="noopener noreferrer"
           >
-            boilerplate
+            TungChem
           </a>
           , every star makes us very happy!
         </Text>
@@ -202,9 +160,9 @@ function App() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://forum.moralis.io/t/ethereum-boilerplate-questions/3951/29"
+            href="https://tungchem.com"
           >
-            Moralis forum
+            forum
           </a>
         </Text>
 
@@ -213,9 +171,9 @@ function App() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://moralis.io?utm_source=boilerplatehosted&utm_medium=todo&utm_campaign=ethereum-boilerplat"
+            href="https://tungchem.com"
           >
-            Moralis
+            TungChem
           </a>
         </Text>
       </Footer>

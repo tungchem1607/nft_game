@@ -8,7 +8,7 @@ import { Card, Image, Tooltip, Modal, Badge, Alert, Spin } from "antd";
 import LipRenderer from "../components/lipRenderer";
 import { useNFTTokenIds } from "../hooks/useNFTTokenIds";
 import { updateContract } from "../redux/blockchain/blockchainActions";
-import { fetchDataMarket } from "../redux/data/dataActions";
+import { fetchData, fetchDataMarket } from "../redux/data/dataActions";
 import {
   FileSearchOutlined,
   RightCircleOutlined,
@@ -16,7 +16,7 @@ import {
 } from "@ant-design/icons";
 import { getExplorer } from "../helpers/networks";
 import { useWeb3React } from "@web3-react/core";
-
+import Web3 from "web3";
 const { Meta } = Card;
 
 const styles = {
@@ -57,6 +57,7 @@ const styles = {
 };
 
 function NFTTokenIds({ inputValue, setInputValue }) {
+  const web3 = new Web3(window.ethereum);
   const dispatch = useDispatch();
   const { active, account, library, connector, chainId } = useWeb3React();
   const fallbackImg =
@@ -105,12 +106,14 @@ function NFTTokenIds({ inputValue, setInputValue }) {
         Market.abi,
         nftMarketNetworkData.address
       );
-      dispatch(updateContract({
-        account: account,
-        NFTToken: lipToken,
-        nftMarket: nftMarket,
-        web3: library,
-      }));
+      dispatch(
+        updateContract({
+          account: account,
+          NFTToken: lipToken,
+          nftMarket: nftMarket,
+          web3: library,
+        })
+      );
     } catch (ex) {
       console.log(ex);
     }
@@ -132,23 +135,43 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   }, [blockchain.nftMarket]);
 
   const handleBuyClick = (nft) => {
-    // setNftToBuy(nft);
-    console.log(nft.image);
+    setNftToBuy(nft);
     setVisibility(true);
   };
 
   const getMarketItem = (nft) => {
-    // const result = fetchMarketItems?.find(
-    //   (e) =>
-    //     e.nftContract === nft?.token_address &&
-    //     e.tokenId === nft?.token_id &&
-    //     e.sold === false &&
-    //     e.confirmed === true
-    // );
-    const result = null;
-    return result;
+    if (nft != null && nft.sold === false && nft.seller !== account) {
+      return nft;
+    } else {
+      return false;
+    }
   };
 
+  const buyNFT = (_account, _item) => {
+    setLoading(true);
+    // console.log('_item', _item);
+    blockchain.market.methods
+      .createMarketSale(_item.nftContract, _item.itemId)
+      .send({
+        from: _account,
+        value: blockchain.web3.utils.toWei(
+          library.web3.utils.fromWei(_item.price, "ether").toString(),
+          "ether"
+        ),
+      })
+      .once("error", (err) => {
+        setLoading(false);
+        setVisibility(false);
+        console.log(err);
+      })
+      .then((receipt) => {
+        setLoading(false);
+        setVisibility(false);
+        console.log(receipt);
+        dispatch(fetchData(blockchain.account));
+        dispatch(fetchDataMarket(blockchain.account));
+      });
+  };
   return (
     <>
       <div>
@@ -157,13 +180,13 @@ function NFTTokenIds({ inputValue, setInputValue }) {
             NFTCollections?.map((nft, index) => (
               <Card
                 hoverable
-                // actions={[
-                //   <Tooltip title="View Collection">
-                //     <RightCircleOutlined
-                //       onClick={() => setInputValue(nft?.addrs)}
-                //     />
-                //   </Tooltip>,
-                // ]}
+                actions={[
+                  <Tooltip title="View Collection">
+                    <RightCircleOutlined
+                      onClick={() => setInputValue(nft?.addrs)}
+                    />
+                  </Tooltip>,
+                ]}
                 style={{ width: 240, border: "2px solid #e7eaf3" }}
                 cover={
                   <Image
@@ -189,7 +212,9 @@ function NFTTokenIds({ inputValue, setInputValue }) {
                     <FileSearchOutlined
                       onClick={() =>
                         window.open(
-                          `${getExplorer(library.utils.toHex(chainId))}address/${nft.nftContract}`,
+                          `${getExplorer(
+                            library.utils.toHex(chainId)
+                          )}address/${nft.nftContract}`,
                           "_blank"
                         )
                       }
@@ -215,10 +240,72 @@ function NFTTokenIds({ inputValue, setInputValue }) {
                 {getMarketItem(nft) && (
                   <Badge.Ribbon text="Buy Now" color="green"></Badge.Ribbon>
                 )}
-                <Meta title={nft.tokenId} description={`#${blockchain.web3.utils.fromWei(nft.price, "ether")} ETH`} />
+                <Meta
+                  title={nft.tokenId}
+                  description={`#${web3.utils.fromWei(
+                    nft.price,
+                    "ether"
+                  )} ETH`}
+                />
               </Card>
             ))}
         </div>
+
+        {getMarketItem(nftToBuy) ? (
+          <Modal
+            title={`Buy ${nftToBuy?.itemId} #${nftToBuy?.tokenId}`}
+            visible={visible}
+            onCancel={() => setVisibility(false)}
+            onOk={() => buyNFT(account, nftToBuy)}
+            okText="Buy"
+          >
+            <Spin spinning={loading}>
+              <div
+                style={{
+                  width: "250px",
+                  margin: "auto",
+                }}
+              >
+                <Badge.Ribbon
+                  color="green"
+                  text={`${
+                    getMarketItem(nftToBuy).price / ("1e" + 18)
+                  } ${nativeName}`}
+                >
+                  <img
+                    src={nftToBuy?.image}
+                    style={{
+                      width: "250px",
+                      borderRadius: "10px",
+                      marginBottom: "15px",
+                    }}
+                  />
+                </Badge.Ribbon>
+              </div>
+            </Spin>
+          </Modal>
+        ) : (
+          <Modal
+            title={`Buy ${nftToBuy?.itemId} #${nftToBuy?.tokenId}`}
+            visible={visible}
+            onCancel={() => setVisibility(false)}
+            onOk={() => setVisibility(false)}
+          >
+            <img
+              src={nftToBuy?.image}
+              style={{
+                width: "250px",
+                margin: "auto",
+                borderRadius: "10px",
+                marginBottom: "15px",
+              }}
+            />
+            <Alert
+              message="This NFT is currently not for sale"
+              type="warning"
+            />
+          </Modal>
+        )}
       </div>
     </>
   );
