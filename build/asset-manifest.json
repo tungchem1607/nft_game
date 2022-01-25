@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.66ec147c.chunk.css",
+    "main.js": "/static/js/main.0a94fc91.chunk.js",
+    "main.js.map": "/static/js/main.0a94fc91.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.3dec3b5b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.3dec3b5b.js.map",
+    "static/css/2.53b0ff91.chunk.css": "/static/css/2.53b0ff91.chunk.css",
+    "static/js/2.6d3589f0.chunk.js": "/static/js/2.6d3589f0.chunk.js",
+    "static/js/2.6d3589f0.chunk.js.map": "/static/js/2.6d3589f0.chunk.js.map",
+    "static/js/3.fd2f6719.chunk.js": "/static/js/3.fd2f6719.chunk.js",
+    "static/js/3.fd2f6719.chunk.js.map": "/static/js/3.fd2f6719.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.53b0ff91.chunk.css.map": "/static/css/2.53b0ff91.chunk.css.map",
+    "static/css/main.66ec147c.chunk.css.map": "/static/css/main.66ec147c.chunk.css.map",
+    "static/js/2.6d3589f0.chunk.js.LICENSE.txt": "/static/js/2.6d3589f0.chunk.js.LICENSE.txt",
+    "static/media/1.39e77af1.png": "/static/media/1.39e77af1.png",
+    "static/media/1.f63f3b86.png": "/static/media/1.f63f3b86.png",
+    "static/media/2.7cd7d872.png": "/static/media/2.7cd7d872.png",
+    "static/media/2.f63f3b86.png": "/static/media/2.f63f3b86.png",
+    "static/media/3.8c1b7447.png": "/static/media/3.8c1b7447.png",
+    "static/media/3.ecd15e09.png": "/static/media/3.ecd15e09.png",
+    "static/media/3.f63f3b86.png": "/static/media/3.f63f3b86.png",
+    "static/media/4.70e1e827.png": "/static/media/4.70e1e827.png",
+    "static/media/4.f63f3b86.png": "/static/media/4.f63f3b86.png",
+    "static/media/5.0c56e43f.png": "/static/media/5.0c56e43f.png",
+    "static/media/5.f63f3b86.png": "/static/media/5.f63f3b86.png",
+    "static/media/_color.1a7b730e.png": "/static/media/_color.1a7b730e.png",
+    "static/media/_rarity_1.c023df5d.png": "/static/media/_rarity_1.c023df5d.png",
+    "static/media/_rarity_2.8248b880.png": "/static/media/_rarity_2.8248b880.png",
+    "static/media/_rarity_3.b211dff2.png": "/static/media/_rarity_3.b211dff2.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3dec3b5b.js",
+    "static/css/2.53b0ff91.chunk.css",
+    "static/js/2.6d3589f0.chunk.js",
+    "static/css/main.66ec147c.chunk.css",
+    "static/js/main.0a94fc91.chunk.js"
+  ]
+}
