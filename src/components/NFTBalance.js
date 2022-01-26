@@ -38,6 +38,7 @@ function NFTBalance() {
   const [nftToSend, setNftToSend] = useState(null);
   const [price, setPrice] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [loadingApproved, setLoadingApproved] = useState(false);
   const blockchain = useSelector((state) => state.blockchain);
   const NFTToken = useSelector((state) => state.data);
 
@@ -109,6 +110,7 @@ function NFTBalance() {
 
   const handleSellClick = (nft) => {
     setNftToSend(nft);
+    getApproved(nft);
     setVisibility(true);
   };
 
@@ -135,6 +137,21 @@ function NFTBalance() {
       dispatch(fetchData(account));
     }
   }, [blockchain.NFTToken]);
+
+  const getApproved = async (nft) => {
+    if (nft?.id) {
+      const address = await blockchain?.NFTToken?.methods
+        .getApproved(nft?.id)
+        .call();
+      if (blockchain.nftMarket._address == address) {
+        setLoadingApproved(false);
+      } else {
+        setLoadingApproved(true);
+      }
+    } else {
+      setLoadingApproved(false);
+    }
+  };
 
   return (
     <>
@@ -171,7 +188,10 @@ function NFTBalance() {
             cover={
               <Image
                 preview={false}
-                src={"https://lh3.googleusercontent.com/BWCni9INm--eqCK800BbRkL10zGyflxfPwTHt4XphMSWG3XZvPx1JyGdfU9vSor8K046DJg-Q8Y4ioUlWHiCZqgR_L00w4vcbA-w=s0" || "error"}
+                src={
+                  "https://lh3.googleusercontent.com/BWCni9INm--eqCK800BbRkL10zGyflxfPwTHt4XphMSWG3XZvPx1JyGdfU9vSor8K046DJg-Q8Y4ioUlWHiCZqgR_L00w4vcbA-w=s0" ||
+                  "error"
+                }
                 fallback={fallbackImg}
                 alt="NFT"
                 style={{ height: "240px" }}
@@ -225,38 +245,38 @@ function NFTBalance() {
             </Card>
           ))}
       </div>
-
-      <Modal
-        title={`List ${nftToSend?.name} #${nftToSend?.id} For Sale`}
-        visible={visible}
-        onCancel={() => setVisibility(false)}
-        onOk={() => {
-          sell(account, nftToSend, price);
-        }}
-        okText="List"
-        footer={[
-          <Button onClick={() => setVisibility(false)}>Cancel</Button>,
-          <Button
-            onClick={() => {
-              approve(account, nftToSend.id);
-            }}
-            type="primary"
-          >
-            Approve
-          </Button>,
-          <Button
-            onClick={() => {
-              sell(account, nftToSend, price);
-            }}
-            type="primary"
-          >
-            List
-          </Button>,
-        ]}
-      >
-        <Spin spinning={loading}>
-          <LipRenderer lip={nftToSend} />
-          {/*           
+      {loadingApproved && (
+        <Modal
+          title={`List ${nftToSend?.name} #${nftToSend?.id} For Sale`}
+          visible={visible}
+          onCancel={() => setVisibility(false)}
+          onOk={() => {
+            sell(account, nftToSend, price);
+          }}
+          okText="List"
+          footer={[
+            <Button onClick={() => setVisibility(false)}>Cancel</Button>,
+            <Button
+              onClick={() => {
+                approve(account, nftToSend.id);
+              }}
+              type="primary"
+            >
+              Approve
+            </Button>,
+            <Button
+              onClick={() => {
+                sell(account, nftToSend, price);
+              }}
+              type="primary"
+            >
+              List
+            </Button>,
+          ]}
+        >
+          <Spin spinning={loading}>
+            <LipRenderer lip={nftToSend} />
+            {/*           
           <img
             src={`${nftToSend?.image}`}
             style={{
@@ -266,13 +286,56 @@ function NFTBalance() {
               marginBottom: "15px",
             }}
           /> */}
-          <Input
-            autoFocus
-            placeholder="Listing Price in MATIC"
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </Spin>
-      </Modal>
+            <Input
+              autoFocus
+              placeholder="Listing Price in MATIC"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Spin>
+        </Modal>
+      )}
+
+      {loadingApproved == false && (
+        <Modal
+          title={`List ${nftToSend?.name} #${nftToSend?.id} For Sale`}
+          visible={visible}
+          onCancel={() => setVisibility(false)}
+          onOk={() => {
+            sell(account, nftToSend, price);
+          }}
+          okText="List"
+          footer={[
+            <Button onClick={() => setVisibility(false)}>Cancel</Button>,
+            <Button
+              onClick={() => {
+                sell(account, nftToSend, price);
+              }}
+              type="primary"
+            >
+              List
+            </Button>,
+          ]}
+        >
+          <Spin spinning={loading}>
+            <LipRenderer lip={nftToSend} />
+            {/*           
+          <img
+            src={`${nftToSend?.image}`}
+            style={{
+              width: "250px",
+              margin: "auto",
+              borderRadius: "10px",
+              marginBottom: "15px",
+            }}
+          /> */}
+            <Input
+              autoFocus
+              placeholder="Listing Price in MATIC"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Spin>
+        </Modal>
+      )}
     </>
   );
 }
