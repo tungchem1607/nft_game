@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Market from "../contracts/NFTMarket.json";
-import LipToken from "../contracts/NFT.json";
+// import Market from "../contracts/NFTMarket.json";
+// import LipToken from "../contracts/NFT.json";
 import { getNativeByChain } from "../helpers/networks";
 import { getCollectionsByChain } from "../helpers/collections";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,43 +91,43 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   // );
   const purchaseItemFunction = "createMarketSale";
   
-  const loadW3Contract = async () => {
-    try {
-      const networkId = await window.ethereum.request({
-        method: "net_version",
-      });
-      const lipTokenNetworkData = await LipToken.networks[networkId];
-      const nftMarketNetworkData = await Market.networks[networkId];
-      // console.log("lipTokenNetworkData", lipTokenNetworkData);
-      const lipToken = new library.eth.Contract(
-        LipToken.abi,
-        lipTokenNetworkData.address
-      );
-      const nftMarket = new library.eth.Contract(
-        Market.abi,
-        nftMarketNetworkData.address
-      );
-      dispatch(
-        updateContract({
-          account: account,
-          NFTToken: lipToken,
-          nftMarket: nftMarket,
-          web3: library,
-        })
-      );
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
+  // const loadW3Contract = async () => {
+  //   try {
+  //     const networkId = await window.ethereum.request({
+  //       method: "net_version",
+  //     });
+  //     const lipTokenNetworkData = await LipToken.networks[networkId];
+  //     const nftMarketNetworkData = await Market.networks[networkId];
+  //     // console.log("lipTokenNetworkData", lipTokenNetworkData);
+  //     const lipToken = new library.eth.Contract(
+  //       LipToken.abi,
+  //       lipTokenNetworkData.address
+  //     );
+  //     const nftMarket = new library.eth.Contract(
+  //       Market.abi,
+  //       nftMarketNetworkData.address
+  //     );
+  //     dispatch(
+  //       updateContract({
+  //         account: account,
+  //         NFTToken: lipToken,
+  //         nftMarket: nftMarket,
+  //         web3: library,
+  //       })
+  //     );
+  //   } catch (ex) {
+  //     console.log(ex);
+  //   }
+  // };
 
   useEffect(() => {
     if (library != undefined) {
       setNativeName(getNativeByChain(library.utils.toHex(chainId)));
       setNFTCollections(getCollectionsByChain(library.utils.toHex(chainId)));
     }
-    if (library != undefined && blockchain.market == null) {
-      loadW3Contract();
-    }
+    // if (library != undefined && blockchain.market == null) {
+    //   loadW3Contract();
+    // }
   }, [library]);
 
   useEffect(() => {
