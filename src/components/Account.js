@@ -43,7 +43,7 @@ function Account() {
   // const getChainId = async () => {
   //   setIsChainId(await web3.eth.getChainId());
   // };
-
+  console.log('chainId',chainId);
   const willMount = useRef(true);
   if (willMount.current) {
     // getChainId();
@@ -59,6 +59,8 @@ function Account() {
 
   const connect = async () => {
     try {
+      // const accounts = await web3.eth.requestAccounts();
+      // console.log('accounts', accounts);
       await activate(injected);
     } catch (ex) {
       console.log(ex);

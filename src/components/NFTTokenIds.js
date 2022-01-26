@@ -90,6 +90,7 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   //   ])
   // );
   const purchaseItemFunction = "createMarketSale";
+  
   const loadW3Contract = async () => {
     try {
       const networkId = await window.ethereum.request({
@@ -118,6 +119,7 @@ function NFTTokenIds({ inputValue, setInputValue }) {
       console.log(ex);
     }
   };
+
   useEffect(() => {
     if (library != undefined) {
       setNativeName(getNativeByChain(library.utils.toHex(chainId)));

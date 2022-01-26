@@ -18,12 +18,12 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
-
+const { mnemonic, BSCSCANAPIKEY} = require('./env.json');
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -34,6 +34,10 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
+  plugins: ["truffle-plugin-verify"],
+  api_keys: {
+    bscscan: BSCSCANAPIKEY,
+  },
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
@@ -46,6 +50,17 @@ module.exports = {
       host: "127.0.0.1", // Localhost (default: none)
       port: 7545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
+    },
+    testnet: {
+      provider: () =>
+        new HDWalletProvider(
+          mnemonic,
+          `https://data-seed-prebsc-1-s1.binance.org:8545`
+        ),
+      network_id: 97,
+      timeoutBlocks: 200,
+      confirmations: 5,
+      production: true, // Treats this network as if it was a public net. (default: false)
     },
     // Another network with more advanced options...
     // advanced: {
@@ -81,18 +96,18 @@ module.exports = {
 
   // Configure your compilers
   contracts_build_directory: "./src/contracts/",
-  compilers: {
-    solc: {
-      version: "0.8.0", // Fetch exact version from solc-bin (default: truffle's version)
-      settings: {
-        // See the solidity docs for advice about optimization and evmVersion
-        optimizer: {
-          enabled: true,
-          runs: 200,
-        },
-      },
-    },
-  },
+  // compilers: {
+  //   solc: {
+  //     version: "0.8.0", // Fetch exact version from solc-bin (default: truffle's version)
+  //     settings: {
+  //       // See the solidity docs for advice about optimization and evmVersion
+  //       optimizer: {
+  //         enabled: true,
+  //         runs: 200,
+  //       },
+  //     },
+  //   },
+  // },
 
   // Truffle DB is currently disabled by default; to enable it, change enabled: false to enabled: true
   //

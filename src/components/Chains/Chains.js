@@ -86,6 +86,7 @@ function Chains() {
   // const { switchNetwork } = useChain();
   const [selected, setSelected] = useState({});
   const { chainId } = useWeb3React();
+  
   useEffect(() => {
     if (!chainId) return null;
     const hexChainId = web3.utils.toHex(chainId);
